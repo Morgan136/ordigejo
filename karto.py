@@ -5,11 +5,11 @@ import sys
 from PyQt6.QtCore import Qt, QSize
 
 sortedList = [
-    ["defaultName", "defaultDate", "defaultAux"],
-    ["name1", "date1", "aux1"],
-    ["name2", "date2", "aux2"],
-    ["name3", "date3", "aux3"],
-    ["name4", "date4", "aux4"]
+    ["defaultName", "defaultDate", "defaultAux", "defaultDescription"],
+    ["name1", "date1", "aux1", "description1"],
+    ["name2", "date2", "aux2", "description2"],
+    ["name3", "date3", "aux3", "description3"],
+    ["name4", "date4", "aux4", "description4"]
 ]
 
 class MainWindow(QMainWindow):
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
 
         # элементы для левой части
         self.elementName = QLabel(sortedList[0][0]) # Имя
-        self.elementDescription = QLabel("Des-\ncrip-\ntion") # Описание
+        self.elementDescription = QLabel(sortedList[0][3]) # Описание
 
         # элементы для правой части
         self.elementDate = QLabel(sortedList[0][1]) # Дата
@@ -60,28 +60,33 @@ class MainWindow(QMainWindow):
         self.previousButton = QPushButton("Previous")
         self.previousButton.clicked.connect(self.previousElement)
 
-
         #layoutMain.addLayout(layoutLeft) # добавление левой части: Имя, Описание
         #layoutMain.addLayout(layoutRight) # добавление правой части: Дата, Aux
         #layoutMain.addLayout(layoutControl) # добавление кнопок
 
-
-
         # добавление слоёв
         layoutMain = QGridLayout()
+        layoutTop = QVBoxLayout()
+        layoutBottom = QHBoxLayout()
 
         # добавление строки поиска
-        layoutMain.addWidget()
+        layoutTop.addWidget(self.elementSearch)
 
         # добавление контента
-
+        layoutMain.addWidget(self.elementName, 0, 0)
+        layoutMain.addWidget(self.elementDescription, 1, 0)
+        layoutMain.addWidget(self.elementDate, 0, 1)
+        layoutMain.addWidget(self.elementAux, 1, 1)
 
         # добавление кнопок
+        layoutBottom.addWidget(self.nextButton)
+        layoutBottom.addWidget(self.previousButton)
 
+        layoutTop.addLayout(layoutMain)
+        layoutTop.addLayout(layoutBottom)
 
         container = QWidget()
-        container.setLayout(layoutMain)
-
+        container.setLayout(layoutTop)
         self.setCentralWidget(container)
 
     def nextElement(self):
@@ -91,12 +96,13 @@ class MainWindow(QMainWindow):
             self.elementName.setText(sortedList[self.n][0])
             self.elementDate.setText(sortedList[self.n][1])
             self.elementAux.setText(sortedList[self.n][2])
+            self.elementDescription.setText(sortedList[self.n][3])
         except IndexError:
             self.n = 0
             self.elementName.setText(sortedList[self.n][0])
             self.elementDate.setText(sortedList[self.n][1])
             self.elementAux.setText(sortedList[self.n][2])
-
+            self.elementDescription.setText(sortedList[self.n][3])
 
     def previousElement(self):
         self.n -= 1
@@ -105,11 +111,13 @@ class MainWindow(QMainWindow):
             self.elementName.setText(sortedList[self.n][0])
             self.elementDate.setText(sortedList[self.n][1])
             self.elementAux.setText(sortedList[self.n][2])
+            self.elementDescription.setText(sortedList[self.n][3])
         except IndexError:
             self.n = len(sortedList) - 1
             self.elementName.setText(sortedList[self.n][0])
             self.elementDate.setText(sortedList[self.n][1])
             self.elementAux.setText(sortedList[self.n][2])
+            self.elementDescription.setText(sortedList[self.n][3])
 
 app = QApplication(sys.argv)
 
