@@ -2,22 +2,26 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QVBoxL
     QPushButton, QToolBar, QCheckBox, QStatusBar, QGridLayout
 from PyQt6.QtGui import QAction, QIcon
 import sys
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt, QSize, QRect
+import lorem
 
 sortedList = [
-    ["defaultName", "defaultDate", "defaultAux", "defaultDescription"],
-    ["name1", "date1", "aux1", "description1"],
-    ["name2", "date2", "aux2", "description2"],
-    ["name3", "date3", "aux3", "description3"],
-    ["name4", "date4", "aux4", "description4"]
+    ["default_Name", "de Date", "el Источник", "priskribo " * 100],
+    ["name1", "date1", "aux1", lorem.get_paragraph(5) + "КОНЕЦ КОНЕЦ КОНЕЦ"],
+    ["name2", "date2", "aux2", "description2 " * 100],
+    ["name3", "date3", "aux3", "description3 " * 100],
+    ["name4", "date4", "aux4", "description4 " * 100],
 ]
 
 class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setFixedSize(600, 400)
 
+        self.width = 600
+        self.height = 400
+
+        self.setFixedSize(self.width, self.height)
         self.setWindowTitle("Ordigejo")
 
         self.n = 0
@@ -46,13 +50,26 @@ class MainWindow(QMainWindow):
         # строка поиска
         self.elementSearch = QLineEdit()
 
-        # элементы для левой части
-        self.elementName = QLabel(sortedList[0][0]) # Имя
-        self.elementDescription = QLabel(sortedList[0][3]) # Описание
+        # контент
 
-        # элементы для правой части
-        self.elementDate = QLabel(sortedList[0][1]) # Дата
-        self.elementAux = QLabel(sortedList[0][2]) # Aux
+        # Имя
+        self.elementName = QLabel(sortedList[0][0], self)
+
+        # Описание
+        self.elementDescription = QLabel(sortedList[0][3])
+        self.elementDescription.setStyleSheet('border-style: solid; border-width: 1px; border-color: black;')
+        self.elementDescription.setMaximumWidth(round(self.width * 0.75))
+        self.elementDescription.setMaximumHeight(round(self.height * 1.85))
+        self.elementDescription.setWordWrap(True)
+
+        # Дата
+        self.elementDate = QLabel(sortedList[0][1])
+
+        # Aux
+        self.elementAux = QLabel(sortedList[0][2])
+
+        # заглушка
+        self.plug = QLabel()
 
         # кнопки
         self.nextButton = QPushButton("Next")
@@ -75,12 +92,14 @@ class MainWindow(QMainWindow):
         # добавление контента
         layoutMain.addWidget(self.elementName, 0, 0)
         layoutMain.addWidget(self.elementDescription, 1, 0)
-        layoutMain.addWidget(self.elementDate, 0, 1)
-        layoutMain.addWidget(self.elementAux, 1, 1)
+        layoutMain.addWidget(self.plug, 0, 1)
+        layoutMain.addWidget(self.plug, 0, 2)
+        layoutMain.addWidget(self.elementDate, 0, 3)
+        layoutMain.addWidget(self.elementAux, 1, 3)
 
         # добавление кнопок
-        layoutBottom.addWidget(self.nextButton)
         layoutBottom.addWidget(self.previousButton)
+        layoutBottom.addWidget(self.nextButton)
 
         layoutTop.addLayout(layoutMain)
         layoutTop.addLayout(layoutBottom)
